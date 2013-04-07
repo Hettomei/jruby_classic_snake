@@ -5,6 +5,7 @@ require 'lwjgl.jar'
 require 'slick.jar'
 
 require 'snake'
+require 'mur'
 
 java_import org.newdawn.slick.BasicGame
 java_import org.newdawn.slick.GameContainer
@@ -17,10 +18,12 @@ class Start < BasicGame
 
   def init(container)
     @s = Snake.new
+    @m = Mur.new
   end
 
   def render(container, graphics)
     @s.draw graphics
+    @m.draw graphics
   end
 
   def update(container, delta)
@@ -28,15 +31,16 @@ class Start < BasicGame
     container.exit if input.is_key_down(Input::KEY_ESCAPE)
 
     if input.is_key_down(Input::KEY_UP)
-      @s.up
+      @s.dir_up
     elsif input.is_key_down(Input::KEY_DOWN)
-      @s.down
+      @s.dir_down
     elsif input.is_key_down(Input::KEY_LEFT)
-      @s.left
+      @s.dir_left
     elsif input.is_key_down(Input::KEY_RIGHT)
-      @s.right
+      @s.dir_right
     end
 
+    @s.update delta
   end
 
 end
