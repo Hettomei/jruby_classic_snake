@@ -1,44 +1,52 @@
+require 'stuck'
+
 java_import org.newdawn.slick.geom.Rectangle
 
 class Snake
 
-  DELTA_BEFORE_ACTION = 20
+  DELTA_BEFORE_ACTION = 1000
   UP    = 1
   DOWN  = 2
   LEFT  = 3
   RIGHT = 4
 
-  def initialize
+  def initialize game_zone
+    @game_zone = game_zone
+    init
+  end
+
+  def init
     @rec = init_rec
-    @direction = RIGHT
+    @current_direction = RIGHT
+    @next_direction = RIGHT
     @total_delta = 0
   end
 
   def init_rec
     a = []
-    x = 50
-    y = 200
-    40.times do
-      a << Rectangle.new(x,y,5,5)
+    x = @game_zone.center_x
+    y = @game_zone.center_y
+    6.times do
+      a << Stuck.new(x, y)
       x += 5
     end
     a
   end
 
   def dir_up
-    @direction = UP if @direction != DOWN
+    @next_direction = UP if @current_direction != DOWN
   end
 
   def dir_down
-    @direction = DOWN if @direction != UP
+    @next_direction = DOWN if @current_direction != UP
   end
 
   def dir_left
-    @direction = LEFT if @direction != RIGHT
+    @next_direction = LEFT if @current_direction != RIGHT
   end
 
   def dir_right
-    @direction = RIGHT if @direction != LEFT
+    @next_direction = RIGHT if @current_direction != LEFT
   end
 
   def remove_last
@@ -47,38 +55,38 @@ class Snake
 
   def up
     r = @rec.last
-    @rec << Rectangle.new(r.get_x, r.get_y - 5, 5, 5)
+    @rec << Stuck.new_up(r)
     remove_last
   end
 
   def down
     r = @rec.last
-    @rec << Rectangle.new(r.get_x, r.get_y + 5, 5, 5)
+    @rec << Stuck.new_down(r)
     remove_last
   end
 
   def left
     r = @rec.last
-    @rec << Rectangle.new(r.get_x - 5, r.get_y, 5, 5)
+    @rec << Stuck.new_left(r)
     remove_last
   end
 
   def right
     r = @rec.last
-    @rec << Rectangle.new(r.get_x + 5, r.get_y, 5, 5)
+    @rec << Stuck.new_right(r)
     remove_last
   end
 
   def draw g
     @rec.each do |r|
-      g.draw r
+      g.draw r.rect
     end
   end
 
   def update delta
     @total_delta += delta
     if @total_delta > DELTA_BEFORE_ACTION
-      case @direction
+      case @next_direction
       when UP
         up
       when DOWN
@@ -89,23 +97,19 @@ class Snake
         right
       end
       @total_delta = 0
-      loose if check_colision
+      @current_direction = @next_direction
+      init if colision?
     end
   end
 
-  def check_colision
+  def colision?
     #we only test the last element against all
     l = @rec.last
     @rec.detect do |r|
-      r.x == l.x and
-        r.y == l.y and
+      r.x == l.x &&
+        r.y == l.y &&
         r != l
     end
   end
 
-  def loose
-    @rec = init_rec
-    @direction = RIGHT
-    @total_delta = 0
-  end
 end

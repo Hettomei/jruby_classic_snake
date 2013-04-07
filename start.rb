@@ -5,7 +5,7 @@ require 'lwjgl.jar'
 require 'slick.jar'
 
 require 'snake'
-require 'mur'
+require 'game_zone'
 
 java_import org.newdawn.slick.BasicGame
 java_import org.newdawn.slick.GameContainer
@@ -17,13 +17,13 @@ java_import org.newdawn.slick.AppGameContainer
 class Start < BasicGame
 
   def init(container)
-    @s = Snake.new
-    @m = Mur.new
+    @gz = GameZone.new
+    @s = Snake.new @gz
   end
 
   def render(container, graphics)
     @s.draw graphics
-    @m.draw graphics
+    @gz.draw graphics
   end
 
   def update(container, delta)
