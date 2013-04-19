@@ -20,6 +20,7 @@ class Snake
     @current_direction = RIGHT
     @next_direction = RIGHT
     @total_delta = 0
+    @new_tail = false
   end
 
   def dir_up
@@ -72,7 +73,12 @@ class Snake
       when RIGHT
         right
       end
-      @stucks.remove_last
+
+      if new_tail?
+        @new_tail = false
+      else
+        @stucks.remove_last
+      end
 
       @total_delta = 0
       @current_direction = @next_direction
@@ -85,5 +91,13 @@ class Snake
       return true if @stucks.head.touch? thing
     end
     false
+  end
+
+  def new_tail
+    @new_tail = true
+  end
+
+  def new_tail?
+    !!@new_tail
   end
 end

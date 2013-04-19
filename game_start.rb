@@ -44,7 +44,8 @@ class GameStart < BasicGame
     end
 
     @snake.update delta
-    if @snake.touch? @thing
+    if @snake.touch?(@thing)
+      @snake.new_tail
       @thing = Thing.new @gz
     end
   end
