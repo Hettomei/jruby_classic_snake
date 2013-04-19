@@ -80,4 +80,10 @@ class Snake
     end
   end
 
+  def touch? thing
+    if @total_delta == 0
+      return true if @stucks.head.touch? thing
+    end
+    false
+  end
 end

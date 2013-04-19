@@ -37,4 +37,8 @@ class Stuck
     @color ||= Color.new Color.white
   end
 
+  def touch?(thing)
+    rect.intersects thing.box
+  end
+
 end
