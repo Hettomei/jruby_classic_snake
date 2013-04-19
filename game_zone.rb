@@ -1,3 +1,5 @@
+java_import 'java.util.Random'
+
 java_import org.newdawn.slick.geom.Rectangle
 
 class GameZone
@@ -30,13 +32,22 @@ class GameZone
   def bottom
     @by ||= rect.get_max_y
   end
+  alias :down :bottom
 
   def center_x
     @cx ||= rect.center_x
   end
 
   def center_y
-    rect.center_y
+    @cy ||= rect.center_y
+  end
+
+  def rand_x
+    rand(left, right)
+  end
+
+  def rand_y
+    rand(up, down)
   end
 
   def contains? object
@@ -51,4 +62,9 @@ class GameZone
     @color ||= Color.new Color.blue
   end
 
+  private
+
+  def rand min, max
+    (@rand ||= Random.new).next_int(max - min + 1) + min
+  end
 end
