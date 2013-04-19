@@ -2,26 +2,10 @@ java_import org.newdawn.slick.geom.Rectangle
 
 class Stuck
 
-  def initialize x, y
+  def initialize x, y, size
     @x = x
     @y = y
-    @size = 5
-  end
-
-  def self.new_up r
-    Stuck.new r.x, r.y - r.size
-  end
-
-  def self.new_down r
-    Stuck.new r.x, r.y + r.size
-  end
-
-  def self.new_left r
-    Stuck.new r.x - r.size, r.y
-  end
-
-  def self.new_right r
-    Stuck.new r.x + r.size, r.y
+    @size = size
   end
 
   def x
@@ -38,5 +22,13 @@ class Stuck
 
   def size
     @size
+  end
+
+  def equal other
+    x == other.x && y == other.y
+  end
+
+  def draw g
+    g.draw rect
   end
 end

@@ -1,10 +1,10 @@
-require 'stuck'
+require 'stucks'
 
 java_import org.newdawn.slick.geom.Rectangle
 
 class Snake
 
-  DELTA_BEFORE_ACTION = 1000
+  DELTA_BEFORE_ACTION = 100
   UP    = 1
   DOWN  = 2
   LEFT  = 3
@@ -16,21 +16,10 @@ class Snake
   end
 
   def init
-    @rec = init_rec
+    @stucks = Stucks.new @game_zone
     @current_direction = RIGHT
     @next_direction = RIGHT
     @total_delta = 0
-  end
-
-  def init_rec
-    a = []
-    x = @game_zone.center_x
-    y = @game_zone.center_y
-    6.times do
-      a << Stuck.new(x, y)
-      x += 5
-    end
-    a
   end
 
   def dir_up
@@ -49,42 +38,29 @@ class Snake
     @next_direction = RIGHT if @current_direction != LEFT
   end
 
-  def remove_last
-    @rec.shift
-  end
-
   def up
-    r = @rec.last
-    @rec << Stuck.new_up(r)
-    remove_last
+    @stucks.new_up
   end
 
   def down
-    r = @rec.last
-    @rec << Stuck.new_down(r)
-    remove_last
+    @stucks.new_down
   end
 
   def left
-    r = @rec.last
-    @rec << Stuck.new_left(r)
-    remove_last
+    @stucks.new_left
   end
 
   def right
-    r = @rec.last
-    @rec << Stuck.new_right(r)
-    remove_last
+    @stucks.new_right
   end
 
   def draw g
-    @rec.each do |r|
-      g.draw r.rect
-    end
+    @stucks.draw g
   end
 
   def update delta
     @total_delta += delta
+
     if @total_delta > DELTA_BEFORE_ACTION
       case @next_direction
       when UP
@@ -96,19 +72,11 @@ class Snake
       when RIGHT
         right
       end
+      @stucks.remove_last
+
       @total_delta = 0
       @current_direction = @next_direction
-      init if colision?
-    end
-  end
-
-  def colision?
-    #we only test the last element against all
-    l = @rec.last
-    @rec.detect do |r|
-      r.x == l.x &&
-        r.y == l.y &&
-        r != l
+      init if @stucks.colision?
     end
   end
 
