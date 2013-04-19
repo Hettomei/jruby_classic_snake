@@ -9,6 +9,7 @@ class GameZone
   end
 
   def draw g
+    g.set_color color
     g.draw rect
   end
 
@@ -45,4 +46,9 @@ class GameZone
   def rect
     @rect ||= Rectangle.new(@x, @y, @size, @size)
   end
+
+  def color
+    @color ||= Color.new Color.blue
+  end
+
 end

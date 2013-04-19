@@ -29,6 +29,12 @@ class Stuck
   end
 
   def draw g
+    g.set_color color
     g.draw rect
   end
+
+  def color
+    @color ||= Color.new Color.white
+  end
+
 end
