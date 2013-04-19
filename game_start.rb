@@ -14,7 +14,7 @@ java_import org.newdawn.slick.Input
 java_import org.newdawn.slick.SlickException
 java_import org.newdawn.slick.AppGameContainer
 
-class Start < BasicGame
+class GameStart < BasicGame
 
   def init(container)
     @gz = GameZone.new
@@ -31,20 +31,23 @@ class Start < BasicGame
     container.exit if input.is_key_down(Input::KEY_ESCAPE)
 
     if input.is_key_down(Input::KEY_UP)
-      @s.dir_up
+      @snake.dir_up
     elsif input.is_key_down(Input::KEY_DOWN)
-      @s.dir_down
+      @snake.dir_down
     elsif input.is_key_down(Input::KEY_LEFT)
-      @s.dir_left
+      @snake.dir_left
     elsif input.is_key_down(Input::KEY_RIGHT)
-      @s.dir_right
+      @snake.dir_right
     end
 
-    @s.update delta
+    @snake.update delta
+    if @snake.touch? @thing
+      @thing = Thing.new @gz
+    end
   end
 
 end
 
-app = AppGameContainer.new Start.new('Snake')
+app = AppGameContainer.new GameStart.new('Snake')
 app.set_display_mode(640, 480, false)
 app.start
