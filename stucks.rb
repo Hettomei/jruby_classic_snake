@@ -13,7 +13,7 @@ class Stucks
   end
 
   def new_up
-    last = @stucks.last
+    last = head
     s = Stuck.new(last.x, last.y - last.size, @size)
     if @game_zone.contains? s
       @stucks << s
@@ -23,7 +23,7 @@ class Stucks
   end
 
   def new_down
-    last = @stucks.last
+    last = head
     s = Stuck.new(last.x, last.y + last.size, @size)
     if @game_zone.contains? s
       @stucks << s
@@ -33,7 +33,7 @@ class Stucks
   end
 
   def new_left
-    last = @stucks.last
+    last = head
     s = Stuck.new(last.x - last.size, last.y, @size)
     if @game_zone.contains? s
       @stucks << s
@@ -43,7 +43,7 @@ class Stucks
   end
 
   def new_right
-    last = @stucks.last
+    last = head
     s = Stuck.new(last.x + last.size, last.y, @size)
     if @game_zone.contains? s
       @stucks << s
@@ -64,7 +64,7 @@ class Stucks
 
   def colision?
     #we only test the last element against all
-    last = @stucks.last
+    last = head
     @stucks.take(count - 1).find do |s|
       last.equal s
     end
@@ -72,5 +72,9 @@ class Stucks
 
   def count
     @stucks.count
+  end
+
+  def head
+    @stucks.last
   end
 end
