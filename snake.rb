@@ -4,7 +4,7 @@ java_import org.newdawn.slick.geom.Rectangle
 
 class Snake
 
-  DELTA_BEFORE_ACTION = 100
+  DELTA_BEFORE_ACTION = 40
   UP    = 1
   DOWN  = 2
   LEFT  = 3
@@ -20,7 +20,7 @@ class Snake
     @current_direction = RIGHT
     @next_direction = RIGHT
     @total_delta = 0
-    @new_tail = false
+    @new_tail = 0
   end
 
   def dir_up
@@ -75,7 +75,8 @@ class Snake
       end
 
       if new_tail?
-        @new_tail = false
+        @new_tail -= 1
+        @new_tail < 0 ? @new_tail = 0 : nil
       else
         @stucks.remove_last
       end
@@ -94,10 +95,10 @@ class Snake
   end
 
   def new_tail
-    @new_tail = true
+    @new_tail += 1
   end
 
   def new_tail?
-    !!@new_tail
+    @new_tail > 0
   end
 end

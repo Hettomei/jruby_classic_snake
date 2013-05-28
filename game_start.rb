@@ -7,6 +7,7 @@ require 'slick.jar'
 require 'snake'
 require 'thing'
 require 'game_zone'
+require 'score'
 
 java_import org.newdawn.slick.BasicGame
 java_import org.newdawn.slick.GameContainer
@@ -19,14 +20,21 @@ class GameStart < BasicGame
 
   def init(container)
     @gz    = GameZone.new
-    @snake     = Snake.new @gz
-    @thing = Thing.new @gz
+    @snake = Snake.new @gz
+    @things = []
+    200.times do
+      @things << Thing.new(@gz)
+    end
+    @score = Score.new
   end
 
   def render(container, graphics)
     @snake.draw graphics
     @gz.draw graphics
-    @thing.draw graphics
+    @things.each do |t|
+      t.draw graphics
+    end
+    graphics.draw_string(@score.display, 150, 10)
   end
 
   def update(container, delta)
@@ -44,9 +52,12 @@ class GameStart < BasicGame
     end
 
     @snake.update delta
-    if @snake.touch?(@thing)
-      @snake.new_tail
-      @thing = Thing.new @gz
+    @things.each do |t|
+      if @snake.touch?(t)
+        @score.add
+        @snake.new_tail
+        t.reset
+      end
     end
   end
 

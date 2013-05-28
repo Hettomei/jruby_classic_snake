@@ -5,9 +5,9 @@ java_import org.newdawn.slick.geom.Rectangle
 class GameZone
 
   def initialize
-    @x = 20 * 5
+    @x = 10 * 5
     @y = 10 * 5
-    @size = 80 * 5
+    @size = 85 * 5
   end
 
   def draw g

@@ -15,9 +15,13 @@ class Thing
   end
 
   def thing
-    @thing ||= Ellipse.new game_zone.rand_x, game_zone.rand_y, 4, 4
+    @thing ||= Ellipse.new game_zone.rand_x, game_zone.rand_y, 20, 20
   end
   alias :box :thing
+
+  def reset
+    @thing = Ellipse.new game_zone.rand_x, game_zone.rand_y, 20, 20
+  end
 
   def color
     @color ||= Color.new Color.green
